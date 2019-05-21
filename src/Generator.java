@@ -1,13 +1,18 @@
 import java.util.List;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
@@ -41,8 +46,54 @@ public class Generator {
 		}
 		
 		System.out.println(questions.toString());
+		BufferedWriter writer = null;
+		BufferedReader template = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("test.tex"), "utf-8"));
+			template = new BufferedReader(new FileReader("template.txt"));
+			String inputLine;
+			while ((inputLine = template.readLine()) != null) {
+				writer.write(inputLine);
+				writer.newLine();
+			}
+			
+			for (int i = 0; i < questions.size(); i++) {
+				if (questions.get(i) == 1) {
+					writer.write("%%%%%%%%%%%% Problem " + (i + 1) + " %%%%%%%%%%%%\r\n" +
+							"\\begin{question}{Problem "+ (i + 1) +"}\r\n" + 
+							"   \r\n" + 
+							"\\textbf{Answer:} \\fbox{$answer$}\r\n" + 
+							"\r\n" + 
+							"\\textbf{Explanation:} \r\n" + 
+							"\r\n" + 
+							"Explain here.\r\n" + 
+							"\\end{question}\n");
+					writer.newLine();
+				} else {
+					writer.write("%%%%%%%%%%%% Problem " + (i + 1) + " %%%%%%%%%%%%\r\n" +
+							"\\begin{question}{Problem " + (i + 1) + "}\n");
+					for (int j = 1; j <= questions.get(i); j++) {
+						writer.write(
+								"\\begin{part} % part " + j + "\r\n" + 
+								"\r\n" + 
+								"\\textbf{Answer:} \\fbox{$answer$}\r\n" + 
+								"\r\n" + 
+								"\\textbf{Explanation:} \r\n" + 
+								"\r\n" + 
+								"Explain here.\r\n" + 
+								"\\end{part}\r\n" + 
+								"\r\n");
+					}
+					writer.write("\\end{question}\n");
+					writer.newLine();
+				}
+			}
+			writer.write("\\end{document}");
+		} finally {
+			writer.close();
+			template.close();
+		}
 	}
-	
 	
 	public static ArrayList<Integer> parseHomework(BufferedReader reader, ArrayList<Integer> questions) {
 		String inputLine; // current line
@@ -51,16 +102,13 @@ public class Generator {
 		int part = 1;     // part number
 		try {
 			while ((inputLine = reader.readLine()) != null) {
-				//System.out.println(inputLine);
 				if (inputLine.startsWith(num + ". ")) {
-					System.out.println(inputLine);
 					num++;
 					questions.add(1);
 					part = 1;
 				}
 				char letter = (char) ('a' + (part - 1));
 				if (inputLine.startsWith("(" + letter + ")")) {
-					System.out.println(inputLine);
 					questions.set(num - 2, part);
 					part++;
 				}

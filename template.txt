@@ -74,19 +74,6 @@
     urlcolor=blue,
 }
 
-%%%%%%%%%%%%%%%%% Identifying Information %%%%%%%%%%%%%%%%%
-%% For 312, we'd rather you DIDN'T tell us who you are   %%
-%% in your homework so that we're not biased when        %%
-%% So, even if you fill this information in, it will not %%
-%% show up in the document unless you uncomment \header  %%
-%% below                                                 %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\myhwname}{Hello}
-\newcommand{\myname}{Test}
-\newcommand{\myemail}{}
-\newcommand{\mysection}{Se}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%% Document Options %%%%%%%%%%%%%%%%%%%%%%
 \noquestionnumbers
 \nopagenumbers
@@ -95,39 +82,7 @@
 \begin{document}
 %\header
 \begin{flushleft}
-CSE 312 [A/B]\\
-Winter 2018\\
-HW \#
+% add header stuff here
 \end{flushleft}
 
 
-\begin{question}{Problem 1}
-   
-\textbf{Answer:} \fbox{$answer$}
-
-\textbf{Explanation:} 
-
-Explain here.
-\end{question}
-
-\begin{question}{Problem 2}
-\begin{part}
-
-\textbf{Answer:} \fbox{$answer$}
-
-\textbf{Explanation:} 
-
-Explain here.
-\end{part}
-
-\begin{part}
-\textbf{Answer:} \fbox{$answer$}
-
-\textbf{Explanation:} 
-
-Explain here.
-
-\end{part}
-\end{question}
-
-\end{document}
