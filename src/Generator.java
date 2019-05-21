@@ -111,7 +111,7 @@ public class Generator {
 		ArrayList<Integer> questions = null; // stores number of questions
 		System.out.println("Filename of homework (hw#.pdf) or return for manual setup\n"
 				+ "PDF must be in same location as this jar\n"
-				+ "Warning: will overwrite to hw#.pdf");
+				+ "Warning: will overwrite hw#boi.tex");
 		String filename = console.nextLine();
 		
 		if (filename.equals("")) { // manual setup
@@ -134,7 +134,7 @@ public class Generator {
 		BufferedReader template = null;
 		try {
 			filename = filename.substring(0, filename.indexOf("."));
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename + ".tex"), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename + "boi.tex"), "utf-8"));
 			template = new BufferedReader(new StringReader(HEADER));
 			String inputLine;
 			while ((inputLine = template.readLine()) != null) {
@@ -158,8 +158,9 @@ public class Generator {
 					writer.write("%%%%%%%%%%%% Problem " + (i + 1) + " %%%%%%%%%%%%\r\n" +
 							"\\begin{question}{Problem " + (i + 1) + "}\n");
 					for (int j = 1; j <= questions.get(i); j++) {
+						char letter = (char) ('a' + j - 1);
 						writer.write(
-								"\\begin{part} % part " + j + "\r\n" + 
+								"\\begin{part} % part " + letter + "\r\n" + 
 								"\r\n" + 
 								"\\textbf{Answer:} \\fbox{$answer$}\r\n" + 
 								"\r\n" + 
@@ -173,8 +174,8 @@ public class Generator {
 					writer.newLine();
 				}
 			}
-			writer.write("\\end{document}%OVERWRITE?");
-			System.out.println("Template created: " + filename + ".tex");
+			writer.write("\\end{document}");
+			System.out.println("Template created: " + filename + "boi.tex");
 		} finally {
 			writer.close();
 			template.close();
