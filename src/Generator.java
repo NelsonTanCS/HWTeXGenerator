@@ -1,32 +1,117 @@
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 public class Generator {
-	private static final String filepath = "C:\\Users\\nelso\\git\\HWTeXGenerator";
+	private static final String HEADER = 
+			"%%%%%%%%%%%%%%%%%%%%%%%%% NOTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + 
+			"%% You can ignore everything from here until             %%\r\n" + 
+			"%% \"Question 1\"                                          %%\r\n" + 
+			"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + 
+			"\\documentclass[11pt]{article}\r\n" + 
+			"\\usepackage{amsmath, amsfonts, amsthm, amssymb}  % Some math symbols\r\n" + 
+			"\\usepackage{fullpage}\r\n" + 
+			"\r\n" + 
+			"\\usepackage[x11names, rgb]{xcolor}\r\n" + 
+			"\\usepackage{graphicx}\r\n" + 
+			"\\usepackage{tikz}\r\n" + 
+			"\\usetikzlibrary{decorations,arrows,shapes}\r\n" + 
+			"\r\n" + 
+			"\\usepackage{etoolbox}\r\n" + 
+			"\\usepackage{enumerate}\r\n" + 
+			"\\usepackage{listings}\r\n" + 
+			"\r\n" + 
+			"\\setlength{\\parindent}{0pt}\r\n" + 
+			"\\setlength{\\parskip}{5pt plus 1pt}\r\n" + 
+			"\r\n" + 
+			"\\newcommand{\\N}{\\mathbb N}\r\n" + 
+			"\\newcommand{\\E}{\\mathbb E}\r\n" + 
+			"\\newcommand{\\V}{Var}\r\n" + 
+			"\\renewcommand{\\P}{\\mathbb P}\r\n" + 
+			"\\newcommand{\\f}{\\frac}\r\n" + 
+			"\r\n" + 
+			"\r\n" + 
+			"\\newcommand{\\nopagenumbers}{\r\n" + 
+			"    \\pagestyle{empty}\r\n" + 
+			"}\r\n" + 
+			"\r\n" + 
+			"\\def\\indented#1{\\list{}{}\\item[]}\r\n" + 
+			"\\let\\indented=\\endlist\r\n" + 
+			"\r\n" + 
+			"\\providetoggle{questionnumbers}\r\n" + 
+			"\\settoggle{questionnumbers}{true}\r\n" + 
+			"\\newcommand{\\noquestionnumbers}{\r\n" + 
+			"    \\settoggle{questionnumbers}{false}\r\n" + 
+			"}\r\n" + 
+			"\r\n" + 
+			"\\newcounter{questionCounter}\r\n" + 
+			"\\newenvironment{question}[2][\\arabic{questionCounter}]{%\r\n" + 
+			"    \\addtocounter{questionCounter}{1}%\r\n" + 
+			"    \\setcounter{partCounter}{0}%\r\n" + 
+			"    \\vspace{.25in} \\hrule \\vspace{0.4em}%\r\n" + 
+			"        \\noindent{\\bf \\iftoggle{questionnumbers}{#1: }{}#2}%\r\n" + 
+			"    \\vspace{0.8em} \\hrule \\vspace{.10in}%\r\n" + 
+			"}{$ $\\newpage}\r\n" + 
+			"\r\n" + 
+			"\\newcounter{partCounter}[questionCounter]\r\n" + 
+			"\\renewenvironment{part}[1][\\alph{partCounter}]{%\r\n" + 
+			"    \\addtocounter{partCounter}{1}%\r\n" + 
+			"    \\vspace{.10in}%\r\n" + 
+			"    \\begin{indented}%\r\n" + 
+			"       {\\bf (#1)} %\r\n" + 
+			"}{\\end{indented}}\r\n" + 
+			"\r\n" + 
+			"\\def\\show#1{\\ifdefempty{#1}{}{#1\\\\}}\r\n" + 
+			"\r\n" + 
+			"\\newcommand{\\header}{%\r\n" + 
+			"\\begin{center}\r\n" + 
+			"    {\\Large \\show\\myhwname}\r\n" + 
+			"    \\show\\myname\r\n" + 
+			"    \\show\\myemail\r\n" + 
+			"    \\show\\mysection\r\n" + 
+			"    \\today\r\n" + 
+			"\\end{center}}\r\n" + 
+			"\r\n" + 
+			"\\usepackage{hyperref} % for hyperlinks\r\n" + 
+			"\\hypersetup{\r\n" + 
+			"    colorlinks=true,\r\n" + 
+			"    linkcolor=blue,\r\n" + 
+			"    filecolor=magenta,      \r\n" + 
+			"    urlcolor=blue,\r\n" + 
+			"}\r\n" + 
+			"\r\n" + 
+			"%%%%%%%%%%%%%%%%%%% Document Options %%%%%%%%%%%%%%%%%%%%%%\r\n" + 
+			"\\noquestionnumbers\r\n" + 
+			"\\nopagenumbers\r\n" + 
+			"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + 
+			"\r\n" + 
+			"\\begin{document}\r\n" + 
+			"%\\header\r\n" + 
+			"\\begin{flushleft}\r\n" + 
+			"% add header stuff here\r\n" + 
+			"\\end{flushleft}\r\n" + 
+			"\r\n";
 	
 	public static void main(String[] args) throws InvalidPasswordException, IOException {
+		java.util.logging.Logger
+	    .getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
+		
 		Scanner console = new Scanner(System.in);
 
 		ArrayList<Integer> questions = null; // stores number of questions
-		System.out.println("Filename of homework or return for manual setup");
+		System.out.println("Filename of homework (hw#.pdf) or return for manual setup\n"
+				+ "PDF must be in same location as this jar\n"
+				+ "Warning: will overwrite to hw#.pdf");
 		String filename = console.nextLine();
 		
 		if (filename.equals("")) { // manual setup
@@ -45,12 +130,12 @@ public class Generator {
 			}
 		}
 		
-		System.out.println(questions.toString());
 		BufferedWriter writer = null;
 		BufferedReader template = null;
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("test.tex"), "utf-8"));
-			template = new BufferedReader(new FileReader("template.txt"));
+			filename = filename.substring(0, filename.indexOf("."));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename + ".tex"), "utf-8"));
+			template = new BufferedReader(new StringReader(HEADER));
 			String inputLine;
 			while ((inputLine = template.readLine()) != null) {
 				writer.write(inputLine);
@@ -88,7 +173,8 @@ public class Generator {
 					writer.newLine();
 				}
 			}
-			writer.write("\\end{document}");
+			writer.write("\\end{document}%OVERWRITE?");
+			System.out.println("Template created: " + filename + ".tex");
 		} finally {
 			writer.close();
 			template.close();
