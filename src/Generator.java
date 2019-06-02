@@ -193,6 +193,10 @@ public class Generator {
 					num++;
 					questions.add(1);
 					part = 1;
+					if (inputLine.contains("(a)")) {
+						questions.set(num - 2, part);
+						part++;
+					}
 				}
 				char letter = (char) ('a' + (part - 1));
 				if (inputLine.startsWith("(" + letter + ")")) {
