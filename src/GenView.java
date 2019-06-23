@@ -23,10 +23,13 @@ public class GenView extends JPanel {
     private File inputFile;
     private String fileName;
     private static final String TEMPLATE_EXT = "Template.tex"; /* extension that goes on the generated file */
+    private static final String[] classes = {"446", "311/312", "Custom"};
 
     public GenView() {
         $$$setupUI$$$();
-        createUIComponents();
+        // file chooser
+        fc = new JFileChooser();
+        fc.addChoosableFileFilter(new PDFFilter());
 
         /**
          *  Sets respective textField to reflect the chosen file
@@ -44,7 +47,7 @@ public class GenView extends JPanel {
 
                 // if SaveTo field was chosen before Input field
                 if (!saveToTextField.getText().isEmpty() && !saveToTextField.getText().contains(".")) {
-                    saveToTextField.setText(fc.getSelectedFile().toString() + "\\" + fileName + TEMPLATE_EXT);
+                    saveToTextField.setText(saveToTextField.getText() + "\\" + fileName + TEMPLATE_EXT);
                 }
             }
         });
@@ -121,12 +124,7 @@ public class GenView extends JPanel {
     }
 
     private void createUIComponents() {
-        // file chooser
-        fc = new JFileChooser();
-        fc.addChoosableFileFilter(new PDFFilter());
 
-        // prevents textfields from resizing
-        //inputTextField.setColumns(0);
     }
 
     /**
@@ -155,11 +153,11 @@ public class GenView extends JPanel {
         typeComboBox = new JComboBox();
         typeComboBox.setEnabled(true);
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
-        defaultComboBoxModel1.addElement("311/312");
         defaultComboBoxModel1.addElement("446");
+        defaultComboBoxModel1.addElement("311/312");
         defaultComboBoxModel1.addElement("Custom");
         typeComboBox.setModel(defaultComboBoxModel1);
-        contentPane.add(typeComboBox, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(typeComboBox, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         inputLabel = new JLabel();
         inputLabel.setText("Input");
         contentPane.add(inputLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
