@@ -80,6 +80,7 @@
         </constraints>
         <properties>
           <columns value="0"/>
+          <editable value="true"/>
           <text value=""/>
         </properties>
       </component>

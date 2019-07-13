@@ -3,7 +3,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 
 public class GenView extends JPanel {
     private JRadioButton autoRadioButton;
@@ -21,12 +21,17 @@ public class GenView extends JPanel {
     private JFileChooser fc;
 
     private File inputFile;
-    private String fileName;
+    private String fileName; // inputFile in string form without file extension
+    private File destFile; // destination that template will be saved in
     private static final String TEMPLATE_EXT = "Template.tex"; /* extension that goes on the generated file */
     private static final String[] classes = {"446", "311/312", "Custom"};
 
     public GenView() {
         $$$setupUI$$$();
+        inputFile = null;
+        fileName = null;
+        destFile = null;
+
         // file chooser
         fc = new JFileChooser();
         fc.addChoosableFileFilter(new PDFFilter());
@@ -61,8 +66,12 @@ public class GenView extends JPanel {
             int returnVal = fc.showSaveDialog(GenView.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 if (inputFile != null) { // Input before SaveTo
+                    destFile = fc.getSelectedFile();
+                    System.out.println(destFile.getName());  // TODO: Need to save to absolute path. For now, save to hw*boi.tex in same location as the JAR.
                     saveToTextField.setText(fc.getSelectedFile().toString() + "\\" + fileName + TEMPLATE_EXT);
                 } else { // SaveTo before Input
+                    destFile = fc.getSelectedFile();
+                    System.out.println(destFile.getName());
                     saveToTextField.setText(fc.getSelectedFile().toString());
                 }
             }
@@ -74,7 +83,17 @@ public class GenView extends JPanel {
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (inputFile == null) {
+                    JOptionPane.showMessageDialog(contentPane, "Choose an input file");
+                } else if (saveToTextField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+                } else {
+                    try {
+                        GenModel.makeTemplate(inputFile, fileName + "new");
+                    } catch (IOException o) {
+                        o.printStackTrace();
+                    }
+                }
             }
         });
     }
