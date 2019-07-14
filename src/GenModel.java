@@ -8,92 +8,92 @@ import java.util.*;
 public class GenModel {
 	private static final String HEADER =
 			"%%%%%%%%%%%%%%%%%%%%%%%%% NOTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
-					"%% You can ignore everything from here until             %%\r\n" +
-					"%% \"Question 1\"                                          %%\r\n" +
-					"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
-					"\\documentclass[11pt]{article}\r\n" +
-					"\\usepackage{amsmath, amsfonts, amsthm, amssymb}  % Some math symbols\r\n" +
-					"\\usepackage{fullpage}\r\n" +
-					"\r\n" +
-					"\\usepackage[x11names, rgb]{xcolor}\r\n" +
-					"\\usepackage{graphicx}\r\n" +
-					"\\usepackage{tikz}\r\n" +
-					"\\usetikzlibrary{decorations,arrows,shapes}\r\n" +
-					"\r\n" +
-					"\\usepackage{etoolbox}\r\n" +
-					"\\usepackage{enumerate}\r\n" +
-					"\\usepackage{listings}\r\n" +
-					"\r\n" +
-					"\\setlength{\\parindent}{0pt}\r\n" +
-					"\\setlength{\\parskip}{5pt plus 1pt}\r\n" +
-					"\r\n" +
-					"\\newcommand{\\N}{\\mathbb N}\r\n" +
-					"\\newcommand{\\E}{\\mathbb E}\r\n" +
-					"\\newcommand{\\V}{Var}\r\n" +
-					"\\renewcommand{\\P}{\\mathbb P}\r\n" +
-					"\\newcommand{\\f}{\\frac}\r\n" +
-					"\r\n" +
-					"\r\n" +
-					"\\newcommand{\\nopagenumbers}{\r\n" +
-					"    \\pagestyle{empty}\r\n" +
-					"}\r\n" +
-					"\r\n" +
-					"\\def\\indented#1{\\list{}{}\\item[]}\r\n" +
-					"\\let\\indented=\\endlist\r\n" +
-					"\r\n" +
-					"\\providetoggle{questionnumbers}\r\n" +
-					"\\settoggle{questionnumbers}{true}\r\n" +
-					"\\newcommand{\\noquestionnumbers}{\r\n" +
-					"    \\settoggle{questionnumbers}{false}\r\n" +
-					"}\r\n" +
-					"\r\n" +
-					"\\newcounter{questionCounter}\r\n" +
-					"\\newenvironment{question}[2][\\arabic{questionCounter}]{%\r\n" +
-					"    \\addtocounter{questionCounter}{1}%\r\n" +
-					"    \\setcounter{partCounter}{0}%\r\n" +
-					"    \\vspace{.25in} \\hrule \\vspace{0.4em}%\r\n" +
-					"        \\noindent{\\bf \\iftoggle{questionnumbers}{#1: }{}#2}%\r\n" +
-					"    \\vspace{0.8em} \\hrule \\vspace{.10in}%\r\n" +
-					"}{$ $\\newpage}\r\n" +
-					"\r\n" +
-					"\\newcounter{partCounter}[questionCounter]\r\n" +
-					"\\renewenvironment{part}[1][\\alph{partCounter}]{%\r\n" +
-					"    \\addtocounter{partCounter}{1}%\r\n" +
-					"    \\vspace{.10in}%\r\n" +
-					"    \\begin{indented}%\r\n" +
-					"       {\\bf (#1)} %\r\n" +
-					"}{\\end{indented}}\r\n" +
-					"\r\n" +
-					"\\def\\show#1{\\ifdefempty{#1}{}{#1\\\\}}\r\n" +
-					"\r\n" +
-					"\\newcommand{\\header}{%\r\n" +
-					"\\begin{center}\r\n" +
-					"    {\\Large \\show\\myhwname}\r\n" +
-					"    \\show\\myname\r\n" +
-					"    \\show\\myemail\r\n" +
-					"    \\show\\mysection\r\n" +
-					"    \\today\r\n" +
-					"\\end{center}}\r\n" +
-					"\r\n" +
-					"\\usepackage{hyperref} % for hyperlinks\r\n" +
-					"\\hypersetup{\r\n" +
-					"    colorlinks=true,\r\n" +
-					"    linkcolor=blue,\r\n" +
-					"    filecolor=magenta,      \r\n" +
-					"    urlcolor=blue,\r\n" +
-					"}\r\n" +
-					"\r\n" +
-					"%%%%%%%%%%%%%%%%%%% Document Options %%%%%%%%%%%%%%%%%%%%%%\r\n" +
-					"\\noquestionnumbers\r\n" +
-					"\\nopagenumbers\r\n" +
-					"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
-					"\r\n" +
-					"\\begin{document}\r\n" +
-					"%\\header\r\n" +
-					"\\begin{flushleft}\r\n" +
-					"% add header stuff here\r\n" +
-					"\\end{flushleft}\r\n" +
-					"\r\n";
+            "%% You can ignore everything from here until             %%\r\n" +
+            "%% \"Question 1\"                                        %%\r\n" +
+            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
+            "\\documentclass[11pt]{article}\r\n" +
+            "\\usepackage{amsmath, amsfonts, amsthm, amssymb}  % Some math symbols\r\n" +
+            "\\usepackage{fullpage}\r\n" +
+            "\r\n" +
+            "\\usepackage[x11names, rgb]{xcolor}\r\n" +
+            "\\usepackage{graphicx}\r\n" +
+            "\\usepackage{tikz}\r\n" +
+            "\\usetikzlibrary{decorations,arrows,shapes}\r\n" +
+            "\r\n" +
+            "\\usepackage{etoolbox}\r\n" +
+            "\\usepackage{enumerate}\r\n" +
+            "\\usepackage{listings}\r\n" +
+            "\r\n" +
+            "\\setlength{\\parindent}{0pt}\r\n" +
+            "\\setlength{\\parskip}{5pt plus 1pt}\r\n" +
+            "\r\n" +
+            "\\newcommand{\\N}{\\mathbb N}\r\n" +
+            "\\newcommand{\\E}{\\mathbb E}\r\n" +
+            "\\newcommand{\\V}{Var}\r\n" +
+            "\\renewcommand{\\P}{\\mathbb P}\r\n" +
+            "\\newcommand{\\f}{\\frac}\r\n" +
+            "\r\n" +
+            "\r\n" +
+            "\\newcommand{\\nopagenumbers}{\r\n" +
+            "    \\pagestyle{empty}\r\n" +
+            "}\r\n" +
+            "\r\n" +
+            "\\def\\indented#1{\\list{}{}\\item[]}\r\n" +
+            "\\let\\indented=\\endlist\r\n" +
+            "\r\n" +
+            "\\providetoggle{questionnumbers}\r\n" +
+            "\\settoggle{questionnumbers}{true}\r\n" +
+            "\\newcommand{\\noquestionnumbers}{\r\n" +
+            "    \\settoggle{questionnumbers}{false}\r\n" +
+            "}\r\n" +
+            "\r\n" +
+            "\\newcounter{questionCounter}\r\n" +
+            "\\newenvironment{question}[2][\\arabic{questionCounter}]{%\r\n" +
+            "    \\addtocounter{questionCounter}{1}%\r\n" +
+            "    \\setcounter{partCounter}{0}%\r\n" +
+            "    \\vspace{.25in} \\hrule \\vspace{0.4em}%\r\n" +
+            "        \\noindent{\\bf \\iftoggle{questionnumbers}{#1: }{}#2}%\r\n" +
+            "    \\vspace{0.8em} \\hrule \\vspace{.10in}%\r\n" +
+            "}{$ $\\newpage}\r\n" +
+            "\r\n" +
+            "\\newcounter{partCounter}[questionCounter]\r\n" +
+            "\\renewenvironment{part}[1][\\alph{partCounter}]{%\r\n" +
+            "    \\addtocounter{partCounter}{1}%\r\n" +
+            "    \\vspace{.10in}%\r\n" +
+            "    \\begin{indented}%\r\n" +
+            "       {\\bf (#1)} %\r\n" +
+            "}{\\end{indented}}\r\n" +
+            "\r\n" +
+            "\\def\\show#1{\\ifdefempty{#1}{}{#1\\\\}}\r\n" +
+            "\r\n" +
+            "\\newcommand{\\header}{%\r\n" +
+            "\\begin{center}\r\n" +
+            "    {\\Large \\show\\myhwname}\r\n" +
+            "    \\show\\myname\r\n" +
+            "    \\show\\myemail\r\n" +
+            "    \\show\\mysection\r\n" +
+            "    \\today\r\n" +
+            "\\end{center}}\r\n" +
+            "\r\n" +
+            "\\usepackage{hyperref} % for hyperlinks\r\n" +
+            "\\hypersetup{\r\n" +
+            "    colorlinks=true,\r\n" +
+            "    linkcolor=blue,\r\n" +
+            "    filecolor=magenta,      \r\n" +
+            "    urlcolor=blue,\r\n" +
+            "}\r\n" +
+            "\r\n" +
+            "%%%%%%%%%%%%%%%%%%% Document Options %%%%%%%%%%%%%%%%%%%%%%\r\n" +
+            "\\noquestionnumbers\r\n" +
+            "\\nopagenumbers\r\n" +
+            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
+            "\r\n" +
+            "\\begin{document}\r\n" +
+            "%\\header\r\n" +
+            "\\begin{flushleft}\r\n" +
+            "% add header stuff here\r\n" +
+            "\\end{flushleft}\r\n" +
+            "\r\n";
 
 
 	/**
@@ -112,9 +112,10 @@ public class GenModel {
 	 * Parses the given filename and outputs and ArrayList representing the number of questions
 	 *
 	 * @param filename File name in string form
+     * @throws IOException
 	 * @return an ArrayList representing the number of questions in the file
 	 */
-	public static ArrayList<Integer> parseFile(String filename) {
+	public static ArrayList<Integer> parseFile(String filename) throws IOException {
 		java.util.logging.Logger
 				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
 		File file = new File(filename);
@@ -125,9 +126,10 @@ public class GenModel {
 	 * Parses the given file and outputs the ArrayList representing the number of questions
 	 *
 	 * @param file the File to be parsed
-	 * @return
+     * @throws IOException
+	 * @return ArrayList of integers representing the number of questions
 	 */
-	public static ArrayList<Integer> parseFile(File file) {
+	public static ArrayList<Integer> parseFile(File file) throws IOException {
 		java.util.logging.Logger
 				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
 		ArrayList<Integer> result = new ArrayList<Integer>();
@@ -165,23 +167,23 @@ public class GenModel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			closeReader(reader);
-		}
+		    reader.close();
+        }
 
 		return result;
 	}
 
 	/**
-	 *
+	 * Creates and prints a template given the ArrayList representation of questions and a destination.
+     *
 	 * @paraam questions ArrayList representation of the number of questions generated form parseFile method
 	 * @param destination String representaiton of the filename to save to.
 	 */
-	public static void printTemplate(ArrayList<Integer> questions, String destination) throws IOException {
-		BufferedWriter writer = null;
-		BufferedReader template = null;
-		try {																					// keep .tex here or move to GenView?
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destination + ".tex"), "utf-8"));
-			template = new BufferedReader(new StringReader(HEADER));
+	public static void printTemplate(ArrayList<Integer> questions, String destination) {
+		try (BufferedWriter writer =
+                     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destination), "utf-8"));
+             BufferedReader template =
+                     new BufferedReader(new StringReader(HEADER))) {
 			String inputLine;
 			while ((inputLine = template.readLine()) != null) {
 				writer.write(inputLine);
@@ -221,11 +223,9 @@ public class GenModel {
 				}
 			}
 			writer.write("\\end{document}");
-		} finally {
-			writer.close();
-			template.close();
-		}
-
+		} catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
 	/**
@@ -250,21 +250,5 @@ public class GenModel {
 			}
 		}
 		return questions;
-	}
-	
-	/**
-	 * Attempts to close the reader after parsing.
-	 * 
-	 * @param reader BufferedReader to be closed
-	 */
-	private static void closeReader(BufferedReader reader) {
-		if (reader != null) {
-			try {
-				reader.close();
-			} catch (IOException e) {
-				System.err.println(e.toString());
-				e.printStackTrace(System.err);
-			}
-		}
 	}
 }

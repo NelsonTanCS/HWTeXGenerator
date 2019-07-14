@@ -22,7 +22,6 @@ public class GenView extends JPanel {
 
     private File inputFile;
     private String fileName; // inputFile in string form without file extension
-    private File destFile; // destination that template will be saved in
     private static final String TEMPLATE_EXT = "Template.tex"; /* extension that goes on the generated file */
     private static final String[] classes = {"446", "311/312", "Custom"};
 
@@ -30,7 +29,6 @@ public class GenView extends JPanel {
         $$$setupUI$$$();
         inputFile = null;
         fileName = null;
-        destFile = null;
 
         // file chooser
         fc = new JFileChooser();
@@ -66,12 +64,8 @@ public class GenView extends JPanel {
             int returnVal = fc.showSaveDialog(GenView.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 if (inputFile != null) { // Input before SaveTo
-                    destFile = fc.getSelectedFile();
-                    System.out.println(destFile.getName());  // TODO: Need to save to absolute path. For now, save to hw*boi.tex in same location as the JAR.
                     saveToTextField.setText(fc.getSelectedFile().toString() + "\\" + fileName + TEMPLATE_EXT);
                 } else { // SaveTo before Input
-                    destFile = fc.getSelectedFile();
-                    System.out.println(destFile.getName());
                     saveToTextField.setText(fc.getSelectedFile().toString());
                 }
             }
@@ -89,7 +83,7 @@ public class GenView extends JPanel {
                     JOptionPane.showMessageDialog(contentPane, "Choose a save location");
                 } else {
                     try {
-                        GenModel.makeTemplate(inputFile, fileName + "new");
+                        GenModel.makeTemplate(inputFile, saveToTextField.getText());
                     } catch (IOException o) {
                         o.printStackTrace();
                     }
@@ -185,6 +179,7 @@ public class GenView extends JPanel {
         contentPane.add(saveToLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         inputTextField = new JTextField();
         inputTextField.setColumns(0);
+        inputTextField.setEditable(true);
         inputTextField.setText("");
         contentPane.add(inputTextField, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         savingLabel = new JLabel();
