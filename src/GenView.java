@@ -24,6 +24,8 @@ public class GenView extends JPanel {
     private String fileName; // inputFile in string form without file extension
     private static final String TEMPLATE_EXT = "Template.tex"; /* extension that goes on the generated file */
     private static final String[] classes = {"446", "311/312", "Custom"};
+    private static final Numbering[] numberings =
+            {new Numbering("1.", "(a)"), new Numbering("1.", "a.")};
 
     public GenView() {
         $$$setupUI$$$();
@@ -82,8 +84,10 @@ public class GenView extends JPanel {
                 } else if (saveToTextField.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(contentPane, "Choose a save location");
                 } else {
+                    Numbering numbering = numberings[typeComboBox.getSelectedIndex()];
                     try {
                         GenModel.makeTemplate(inputFile, saveToTextField.getText());
+                        JOptionPane.showMessageDialog(contentPane, "Done");
                     } catch (IOException o) {
                         o.printStackTrace();
                     }

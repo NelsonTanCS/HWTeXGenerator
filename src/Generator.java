@@ -184,24 +184,25 @@ public class Generator {
 	
 	public static ArrayList<Integer> parseHomework(BufferedReader reader, ArrayList<Integer> questions) {
 		String inputLine; // current line
-		questions = new ArrayList<Integer>();
-		int num = 1; 	  // question number
-		int part = 1;     // part number
+		questions = new ArrayList<Integer>(); //
+		int num = 1; 	  // question number // Replaced by Numbering object
+		int part = 1;     // part number // Replaced by Numbering object
 		try {
 			while ((inputLine = reader.readLine()) != null) {
-				if (inputLine.startsWith(num + ". ")) {
-					num++;
+				if (inputLine.startsWith(num + ". ")) { // getQuestion
+					num++; // nextQuestion. Can be moved last line of while loop
 					questions.add(1);
-					part = 1;
-					if (inputLine.contains("(a)")) {
-						questions.set(num - 2, part);
+					part = 1; // resetPart
+					if (inputLine.contains("(a)")) { // if part is on the same line as question
+						questions.set(num - 2, part); // Add current question index because "num - 2" is hard to read
 						part++;
 					}
-				}
-				char letter = (char) ('a' + (part - 1));
-				if (inputLine.startsWith("(" + letter + ")")) {
-					questions.set(num - 2, part);
-					part++;
+				} else {
+					char letter = (char) ('a' + (part - 1));        // getPart
+					if (inputLine.startsWith("(" + letter + ")")) { // getPart
+						questions.set(num - 2, part); // -1 for 0 index and -1 for nextQuestion
+						part++; // nextPart
+					}
 				}
 			}
 		} catch (IOException e) {

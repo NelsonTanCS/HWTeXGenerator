@@ -174,6 +174,57 @@ public class GenModel {
 	}
 
 	/**
+	 * Parses the given file and outputs the ArrayList representing the number of questions
+	 *
+	 * @param file the File to be parsed
+	 * @throws IOException
+	 * @return ArrayList of integers representing the number of questions
+	 */
+	public static ArrayList<Integer> parseFileNew(File file) throws IOException {
+		java.util.logging.Logger
+				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		BufferedReader reader = null;
+		try {
+			// Load and put the file into a BufferedReader
+			PDDocument document = PDDocument.load(file);
+			if (!document.isEncrypted()) {
+				PDFTextStripper stripper = new PDFTextStripper();
+				reader = new BufferedReader(new StringReader(stripper.getText(document)));
+			}
+
+			// parse the file
+			String inputLine; // current line
+			int num = 1; 	  // question number // replaced by Numbering object
+			int part = 1;     // part number // replaced by Numbering object
+			while ((inputLine = reader.readLine()) != null) {
+				if (inputLine.startsWith(num + ". ")) { // getQuestion
+					num++; // nextQuestion
+					result.add(1);
+					part = 1; // resetPart
+					if (inputLine.contains("(a)")) { // getPart. If part is on same line as question
+						result.set(num - 2, part);
+						part++; // nextPart
+					}
+				}
+				char letter = (char) ('a' + (part - 1));
+				if (inputLine.startsWith("(" + letter + ")")) { // getPart
+					result.set(num - 2, part);
+					part++; // nextPart
+				}
+			}
+		} catch (InvalidPasswordException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			reader.close();
+		}
+
+		return result;
+	}
+
+	/**
 	 * Creates and prints a template given the ArrayList representation of questions and a destination.
      *
 	 * @paraam questions ArrayList representation of the number of questions generated form parseFile method
