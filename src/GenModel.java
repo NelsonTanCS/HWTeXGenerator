@@ -178,11 +178,12 @@ public class GenModel {
 	 *
 	 * @param file the File to be parsed
 	 * @throws IOException
-	 * @return ArrayList of integers representing the number of questions
+	 * @return ArrayList of integers representing the number of questions. Index+1 is the question number and value is number of parts.
 	 */
 	public static ArrayList<Integer> parseFileNew(File file) throws IOException {
 		java.util.logging.Logger
-				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
+				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF); // turns off stack trace for missing symbols
+
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		BufferedReader reader = null;
 		try {
@@ -195,22 +196,20 @@ public class GenModel {
 
 			// parse the file
 			String inputLine; // current line
-			int num = 1; 	  // question number // replaced by Numbering object
-			int part = 1;     // part number // replaced by Numbering object
+			Numbering numb = new Numbering("(#)", "(*)");
 			while ((inputLine = reader.readLine()) != null) {
-				if (inputLine.startsWith(num + ". ")) { // getQuestion
-					num++; // nextQuestion
+				if (inputLine.startsWith(numb.getQuestion())) { // getQuestion
+					numb.nextQuestion(); // nextQuestion
 					result.add(1);
-					part = 1; // resetPart
-					if (inputLine.contains("(a)")) { // getPart. If part is on same line as question
-						result.set(num - 2, part);
-						part++; // nextPart
+					numb.resetPart(); // resetPart
+					if (inputLine.contains(numb.getPart())) { // getPart. If part is on same line as question
+						result.set(numb.question() - 2, numb.part());
+						numb.nextPart(); // nextPart
 					}
 				}
-				char letter = (char) ('a' + (part - 1));
-				if (inputLine.startsWith("(" + letter + ")")) { // getPart
-					result.set(num - 2, part);
-					part++; // nextPart
+				if (inputLine.startsWith(numb.getPart())) { // getPart
+					result.set(numb.question() - 2, numb.part());
+					numb.nextPart(); // nextPart
 				}
 			}
 		} catch (InvalidPasswordException e) {

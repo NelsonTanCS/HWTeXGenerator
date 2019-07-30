@@ -3,16 +3,20 @@
  */
 
 public class Numbering {
-    String question; /* question numbering e.g. 1. */ // TODO: parse the question and part to look for the incrementable piece and separate it from parentheses etc.
-    String part; /* question number e.g. (a) */
-    char currQuestion; /* the current question Integer or Char */
-    boolean qIsInt; /* the question is enumerated with ints */
-    char currPart; /* the current part Integer or Char */
-    boolean pIsInt; /* the part is enumerated with ints */
+    private String question; /* question numbering e.g. 1. */
+    private String part; /* question numbering e.g. (a) */
+    private int qNum; /* question number */
+    private int pNum; /* part number */
+    private char currQuestion; /* the current question Integer or Char */
+    private boolean qIsInt; /* the question is enumerated with ints */
+    private char currPart; /* the current part Integer or Char */
+    private boolean pIsInt; /* the part is enumerated with ints */
 
     public Numbering (String question, String part) {
         this.question = question;
         this.part = part;
+        qNum = 1;
+        pNum = 1;
         if (question.contains("#")) {
             currQuestion = '1';
             qIsInt = true;
@@ -51,17 +55,29 @@ public class Numbering {
     public void nextQuestion() {
         if (qIsInt) {
             currQuestion = (char) (Character.getNumericValue(currQuestion) + 1);
+            qNum++;
         } else {
             currQuestion += 1;
+            qNum++;
         }
     }
 
     public void nextPart() {
         if (pIsInt) {
             currPart = (char) (Character.getNumericValue(currPart) + 1);
+            pNum++;
         } else {
             currPart += 1;
+            pNum++;
         }
+    }
+
+    public int question() {
+        return qNum;
+    }
+
+    public int part() {
+        return pNum;
     }
 
     public void resetPart() {

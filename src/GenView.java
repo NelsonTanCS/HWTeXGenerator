@@ -25,7 +25,7 @@ public class GenView extends JPanel {
     private static final String TEMPLATE_EXT = "Template.tex"; /* extension that goes on the generated file */
     private static final String[] classes = {"446", "311/312", "Custom"};
     private static final Numbering[] numberings =
-            {new Numbering("1.", "(a)"), new Numbering("1.", "a.")};
+            {new Numbering("#.", "(*)"), new Numbering("#.", "*.")};
 
     public GenView() {
         $$$setupUI$$$();
