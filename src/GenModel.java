@@ -95,21 +95,6 @@ public class GenModel {
             "\\end{flushleft}\r\n" +
             "\r\n";
 
-
-	/**
-	 * <h1>LEGACY METHOD</h1>
-	 *
-	 * Combines the parseFile and printTemplate methods. Will probably make the other two
-	 * private and this one the sole public method.
-	 *
-	 * @param file File to be parsed
-	 * @param destination Name of template to be saved as (will update to absolute path).
-	 */
-	public static void makeTemplate(File file, String destination) throws IOException {
-		ArrayList<Integer> questions = parseFile(file);
-		printTemplate(questions, destination);
-	}
-
 	/**
 	 * Combines the parseFile and printTemplate methods. Will probably make the other two
 	 * private and this one the sole public method.
@@ -117,86 +102,20 @@ public class GenModel {
 	 * @param file File to be parsed
 	 * @param destination Name of template to be saved as (will update to absolute path).
 	 */
-	public static void makeTemplateNew(File file, String destination, Numbering numb) throws IOException {
-		ArrayList<Integer> questions = parseFileNew(file, numb);
+	public static void makeTemplate(File file, String destination, Numbering numb) throws IOException {
+		ArrayList<Integer> questions = parseFile(file, numb);
 		printTemplate(questions, destination);
-	}
-
-	/**
-	 * Parses the given filename and outputs and ArrayList representing the number of questions
-	 *
-	 * @param filename File name in string form
-     * @throws IOException
-	 * @return an ArrayList representing the number of questions in the file
-	 */
-	public static ArrayList<Integer> parseFile(String filename) throws IOException {
-		java.util.logging.Logger
-				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
-		File file = new File(filename);
-		return parseFile(file);
-	}
-
-	/**
-	 * <h1>LEGACY METHOD</h1>
-	 *
-	 * Parses the given file and outputs the ArrayList representing the number of questions.
-	 *
-	 * @param file the File to be parsed
-     * @throws IOException
-	 * @return ArrayList of integers representing the number of questions
-	 */
-	public static ArrayList<Integer> parseFile(File file) throws IOException {
-		java.util.logging.Logger
-				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		BufferedReader reader = null;
-		try {
-			// Load and put the file into a BufferedReader
-			PDDocument document = PDDocument.load(file);
-			if (!document.isEncrypted()) {
-				PDFTextStripper stripper = new PDFTextStripper();
-				reader = new BufferedReader(new StringReader(stripper.getText(document)));
-			}
-
-			// parse the file
-			String inputLine; // current line
-			int num = 1; 	  // question number
-			int part = 1;     // part number
-			while ((inputLine = reader.readLine()) != null) {
-				if (inputLine.startsWith(num + ". ")) {
-					num++;
-					result.add(1);
-					part = 1;
-					if (inputLine.contains("(a)")) {
-						result.set(num - 2, part);
-						part++;
-					}
-				}
-				char letter = (char) ('a' + (part - 1));
-				if (inputLine.startsWith("(" + letter + ")")) {
-					result.set(num - 2, part);
-					part++;
-				}
-			}
-		} catch (InvalidPasswordException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-		    reader.close();
-        }
-
-		return result;
 	}
 
 	/**
 	 * Parses the given file and outputs the ArrayList representing the number of questions
 	 *
 	 * @param file the File to be parsed
+     * @param numb Numbering system to be used
 	 * @throws IOException
 	 * @return ArrayList of integers representing the number of questions. Index+1 is the question number and value is number of parts.
 	 */
-	public static ArrayList<Integer> parseFileNew(File file, Numbering numb) throws IOException {
+	public static ArrayList<Integer> parseFile(File file, Numbering numb) throws IOException {
 		java.util.logging.Logger
 				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF); // turns off stack trace for missing symbols
 

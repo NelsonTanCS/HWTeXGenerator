@@ -84,7 +84,7 @@ public class GenView extends JPanel {
             } else {
                 Numbering numb = numberings[typeComboBox.getSelectedIndex()];
                 try {
-                    GenModel.makeTemplateNew(inputFile, saveToTextField.getText(), numb);
+                    GenModel.makeTemplate(inputFile, saveToTextField.getText(), numb);
                     JOptionPane.showMessageDialog(contentPane, "Done");
                 } catch (IOException o) {
                     o.printStackTrace();
