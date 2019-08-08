@@ -97,6 +97,8 @@ public class GenModel {
 
 
 	/**
+	 * <h1>LEGACY METHOD</h1>
+	 *
 	 * Combines the parseFile and printTemplate methods. Will probably make the other two
 	 * private and this one the sole public method.
 	 *
@@ -105,6 +107,18 @@ public class GenModel {
 	 */
 	public static void makeTemplate(File file, String destination) throws IOException {
 		ArrayList<Integer> questions = parseFile(file);
+		printTemplate(questions, destination);
+	}
+
+	/**
+	 * Combines the parseFile and printTemplate methods. Will probably make the other two
+	 * private and this one the sole public method.
+	 *
+	 * @param file File to be parsed
+	 * @param destination Name of template to be saved as (will update to absolute path).
+	 */
+	public static void makeTemplateNew(File file, String destination, Numbering numb) throws IOException {
+		ArrayList<Integer> questions = parseFileNew(file, numb);
 		printTemplate(questions, destination);
 	}
 
@@ -123,7 +137,9 @@ public class GenModel {
 	}
 
 	/**
-	 * Parses the given file and outputs the ArrayList representing the number of questions
+	 * <h1>LEGACY METHOD</h1>
+	 *
+	 * Parses the given file and outputs the ArrayList representing the number of questions.
 	 *
 	 * @param file the File to be parsed
      * @throws IOException
@@ -180,7 +196,7 @@ public class GenModel {
 	 * @throws IOException
 	 * @return ArrayList of integers representing the number of questions. Index+1 is the question number and value is number of parts.
 	 */
-	public static ArrayList<Integer> parseFileNew(File file) throws IOException {
+	public static ArrayList<Integer> parseFileNew(File file, Numbering numb) throws IOException {
 		java.util.logging.Logger
 				.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF); // turns off stack trace for missing symbols
 
@@ -196,9 +212,14 @@ public class GenModel {
 
 			// parse the file
 			String inputLine; // current line
-			Numbering numb = new Numbering("(#)", "(*)");
+			boolean flag = false; // temp
 			while ((inputLine = reader.readLine()) != null) {
+				if (flag) {
+					System.out.println(numb.getQuestion());
+				}
+				System.out.println(numb.getQuestion());
 				if (inputLine.startsWith(numb.getQuestion())) { // getQuestion
+					flag = true;
 					numb.nextQuestion(); // nextQuestion
 					result.add(1);
 					numb.resetPart(); // resetPart
@@ -206,12 +227,16 @@ public class GenModel {
 						result.set(numb.question() - 2, numb.part());
 						numb.nextPart(); // nextPart
 					}
+					System.out.println(result.toString());
 				}
 				if (inputLine.startsWith(numb.getPart())) { // getPart
 					result.set(numb.question() - 2, numb.part());
 					numb.nextPart(); // nextPart
+					System.out.println(result.toString());
 				}
 			}
+			System.out.println("done");
+			System.out.println(result.toString());
 		} catch (InvalidPasswordException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

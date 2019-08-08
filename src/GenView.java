@@ -76,21 +76,18 @@ public class GenView extends JPanel {
         /**
          *  Given a valid input file and save location, generates the tex template.
          */
-        generateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (inputFile == null) {
-                    JOptionPane.showMessageDialog(contentPane, "Choose an input file");
-                } else if (saveToTextField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(contentPane, "Choose a save location");
-                } else {
-                    Numbering numbering = numberings[typeComboBox.getSelectedIndex()];
-                    try {
-                        GenModel.makeTemplate(inputFile, saveToTextField.getText());
-                        JOptionPane.showMessageDialog(contentPane, "Done");
-                    } catch (IOException o) {
-                        o.printStackTrace();
-                    }
+        generateButton.addActionListener(e -> {
+            if (inputFile == null) {
+                JOptionPane.showMessageDialog(contentPane, "Choose an input file");
+            } else if (saveToTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+            } else {
+                Numbering numb = numberings[typeComboBox.getSelectedIndex()];
+                try {
+                    GenModel.makeTemplateNew(inputFile, saveToTextField.getText(), numb);
+                    JOptionPane.showMessageDialog(contentPane, "Done");
+                } catch (IOException o) {
+                    o.printStackTrace();
                 }
             }
         });

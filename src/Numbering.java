@@ -11,6 +11,7 @@ public class Numbering {
     private boolean qIsInt; /* the question is enumerated with ints */
     private char currPart; /* the current part Integer or Char */
     private boolean pIsInt; /* the part is enumerated with ints */
+    private boolean debug = true;
 
     public Numbering (String question, String part) {
         this.question = question;
@@ -38,6 +39,9 @@ public class Numbering {
 
     public String getQuestion() {
         if (qIsInt) {
+            if (debug) {
+                question.replace("#", Character.toString(currQuestion));
+            }
             return question.replace("#", Character.toString(currQuestion));
         } else {
             return question.replace("*", Character.toString(currQuestion));
@@ -54,7 +58,7 @@ public class Numbering {
 
     public void nextQuestion() {
         if (qIsInt) {
-            currQuestion = (char) (Character.getNumericValue(currQuestion) + 1);
+            currQuestion = (char) (currQuestion + 1);
             qNum++;
         } else {
             currQuestion += 1;
@@ -64,7 +68,7 @@ public class Numbering {
 
     public void nextPart() {
         if (pIsInt) {
-            currPart = (char) (Character.getNumericValue(currPart) + 1);
+            currPart = (char) (currPart + 1);
             pNum++;
         } else {
             currPart += 1;
@@ -83,8 +87,10 @@ public class Numbering {
     public void resetPart() {
         if (pIsInt) {
             currPart = '1';
+            pNum = 1;
         } else {
             currPart = 'a';
+            pNum = 1;
         }
     }
 }
