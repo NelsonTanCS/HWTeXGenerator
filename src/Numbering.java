@@ -9,10 +9,17 @@ public class Numbering {
     private int pNum; /* part number */
     private char currQuestion; /* the current question Integer or Char */
     private boolean qIsInt; /* the question is enumerated with ints */
-    private char currPart; /* the current part Integer or Char */
+    private char currPart; /* the current part; Integer or Char */
     private boolean pIsInt; /* the part is enumerated with ints */
-    private boolean debug = true;
 
+    /**
+     * Constructs a Numbering system.
+     * e.g. Numbering("#.", "(*)") represents lists with 1., 2., 3. and sublists (a), (b), (c).
+     *
+     * @param question Format of the list
+     * @param part Format of the sublist
+     * @throws IllegalArgumentException if the parameters don't contain a "*" or "#"
+     */
     public Numbering (String question, String part) {
         this.question = question;
         this.part = part;
@@ -39,9 +46,6 @@ public class Numbering {
 
     public String getQuestion() {
         if (qIsInt) {
-            if (debug) {
-                question.replace("#", Character.toString(currQuestion));
-            }
             return question.replace("#", Character.toString(currQuestion));
         } else {
             return question.replace("*", Character.toString(currQuestion));
@@ -58,7 +62,7 @@ public class Numbering {
 
     public void nextQuestion() {
         if (qIsInt) {
-            currQuestion = (char) (currQuestion + 1);
+            currQuestion = (char) (currQuestion + 1); // TODO: '9' + 1 = ':'
             qNum++;
         } else {
             currQuestion += 1;
