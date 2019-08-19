@@ -7,9 +7,11 @@ public class Numbering {
     private String part; /* question numbering e.g. (a) */
     private int qNum; /* question number */
     private int pNum; /* part number */
-    private char currQuestion; /* the current question Integer or Char */
+    private char charQuestion; /* the current question Integer or Char */
+    private int intQuestion;
     private boolean qIsInt; /* the question is enumerated with ints */
-    private char currPart; /* the current part; Integer or Char */
+    private char charPart; /* the current part; Integer or Char */
+    private int intPart;
     private boolean pIsInt; /* the part is enumerated with ints */
 
     /**
@@ -26,56 +28,61 @@ public class Numbering {
         qNum = 1;
         pNum = 1;
         if (question.contains("#")) {
-            currQuestion = '1';
+            intQuestion = 1;
             qIsInt = true;
         } else if (question.contains("*")) {
-            currQuestion = 'a';
+            charQuestion = 'a';
             qIsInt = false;
         } else {
             throw new IllegalArgumentException("question parameter requires a \"*\" or \"#\"");
         }
 
         if (part.contains("#")) {
-            currPart = '1';
+            intPart = 1;
             pIsInt = true;
         } else if (question.contains("*")) {
-            currPart = 'a';
+            charPart = 'a';
             pIsInt = false;
         }
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public String getQuestion() {
         if (qIsInt) {
-            return question.replace("#", Character.toString(currQuestion));
+            return question.replace("#",Integer.toString(intQuestion));
         } else {
-            return question.replace("*", Character.toString(currQuestion));
+            return question.replace("*", Character.toString(charQuestion));
         }
     }
 
     public String getPart() {
         if (pIsInt) {
-            return part.replace("#", Character.toString(currPart));
+            return part.replace("#", Integer.toString(intPart));
         } else {
-            return part.replace("*", Character.toString(currPart));
+            return part.replace("*", Character.toString(charPart));
         }
     }
 
     public void nextQuestion() {
         if (qIsInt) {
-            currQuestion = (char) (currQuestion + 1); // TODO: '9' + 1 = ':'
+            intQuestion++;
             qNum++;
         } else {
-            currQuestion += 1;
+            charQuestion += 1;
             qNum++;
         }
     }
 
     public void nextPart() {
         if (pIsInt) {
-            currPart = (char) (currPart + 1);
+            intPart++;
             pNum++;
         } else {
-            currPart += 1;
+            charPart += 1;
             pNum++;
         }
     }
@@ -90,10 +97,10 @@ public class Numbering {
 
     public void resetPart() {
         if (pIsInt) {
-            currPart = '1';
+            intPart = 1;
             pNum = 1;
         } else {
-            currPart = 'a';
+            charPart = 'a';
             pNum = 1;
         }
     }

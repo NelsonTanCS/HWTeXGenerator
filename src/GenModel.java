@@ -131,14 +131,8 @@ public class GenModel {
 
 			// parse the file
 			String inputLine; // current line
-			boolean flag = false; // temp
 			while ((inputLine = reader.readLine()) != null) {
-				if (flag) {
-					System.out.println(numb.getQuestion());
-				}
-				System.out.println(numb.getQuestion());
 				if (inputLine.startsWith(numb.getQuestion())) { // getQuestion
-					flag = true;
 					numb.nextQuestion(); // nextQuestion
 					result.add(1);
 					numb.resetPart(); // resetPart
@@ -146,16 +140,12 @@ public class GenModel {
 						result.set(numb.question() - 2, numb.part());
 						numb.nextPart(); // nextPart
 					}
-					System.out.println(result.toString());
 				}
 				if (inputLine.startsWith(numb.getPart())) { // getPart
 					result.set(numb.question() - 2, numb.part());
 					numb.nextPart(); // nextPart
-					System.out.println(result.toString());
 				}
 			}
-			System.out.println("done");
-			System.out.println(result.toString());
 		} catch (InvalidPasswordException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
