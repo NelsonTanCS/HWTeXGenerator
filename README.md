@@ -6,3 +6,4 @@ Generates a TeX template by parsing CSE 311/312/446 homework assignments.
 4. Choose a save location.
 5. Generate.
 
+![GUI image](https://github.com/NelsonTanCS/HWTeXGenerator/blob/master/texgen.PNG)
