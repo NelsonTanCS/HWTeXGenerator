@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
 
 public class GenView extends JPanel {
     private JRadioButton autoRadioButton;
@@ -18,6 +19,8 @@ public class GenView extends JPanel {
     private JLabel inputLabel;
     private JLabel saveToLabel;
     private JLabel savingLabel;
+    private JTextField manualNumber;
+    private JTextField manualPart;
     private JFileChooser fc;
 
     private File inputFile;
@@ -29,6 +32,8 @@ public class GenView extends JPanel {
 
     public GenView() {
         $$$setupUI$$$();
+        manualNumber.setVisible(false);
+        manualPart.setVisible(false);
         inputFile = null;
         fileName = null;
 
@@ -77,26 +82,63 @@ public class GenView extends JPanel {
          *  Given a valid input file and save location, generates the tex template.
          */
         generateButton.addActionListener(e -> {
-            if (inputFile == null) {
-                JOptionPane.showMessageDialog(contentPane, "Choose an input file");
-            } else if (saveToTextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(contentPane, "Choose a save location");
-            } else {
-                Numbering numb = numberings[typeComboBox.getSelectedIndex()];
-                try {
-                    GenModel.makeTemplate(inputFile, saveToTextField.getText(), numb);
-                    JOptionPane.showMessageDialog(contentPane, "Done");
-                } catch (IOException o) {
-                    o.printStackTrace();
+            if (manualRadioButton.isSelected()) {
+                if (saveToTextField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+                } else {
+                    int numOfQuestions = Integer.parseInt(manualNumber.getText());
+                    String numOfParts = manualPart.getText();
+                    ArrayList<Integer> questionArray = new ArrayList<Integer>(numOfQuestions);
+                    for (int i = 0; i < numOfQuestions - 1; i++) {
+                        questionArray.add(Integer.parseInt(numOfParts.substring(0, numOfParts.indexOf(","))));
+                        numOfParts = numOfParts.substring(numOfParts.indexOf(",") + 1);
+                    }
+                    questionArray.add(Integer.parseInt(numOfParts));
+                    GenModel.printTemplate(questionArray, saveToTextField.getText() + "\\manualTemplate.tex");
+                }
+            } else { // autoRadioButton
+                if (inputFile == null) {
+                    JOptionPane.showMessageDialog(contentPane, "Choose an input file");
+                } else if (saveToTextField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+                } else {
+                    Numbering numb = null;
+                    if (classes[typeComboBox.getSelectedIndex()].equals("Custom")) {
+                        String question = manualNumber.getText();
+                        String part = manualPart.getText();
+
+                        // Well formed data check
+                        if (!question.contains("#") || !question.contains("*")) {
+                            throw new IllegalArgumentException("Custom question must contains a \"#\" or \"*\"");
+                        }
+                        if (!part.contains("#") || !part.contains("*")) {
+                            throw new IllegalArgumentException("Custom part must contains a \"#\" or \"*\"");
+                        }
+
+                        numb = new Numbering(manualNumber.getText(), manualPart.getText());
+                    } else {
+                        numb = numberings[typeComboBox.getSelectedIndex()];
+                    }
+                    try {
+                        GenModel.makeTemplate(inputFile, saveToTextField.getText(), numb);
+                        JOptionPane.showMessageDialog(contentPane, "Done");
+                    } catch (IOException o) {
+                        o.printStackTrace();
+                    }
                 }
             }
+        });
+
+        manualRadioButton.addActionListener(e -> {
+            System.out.println("sup");
+            manualNumber.setVisible(true);
+            manualPart.setVisible(true);
         });
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("TeX Generator");
         frame.setContentPane(new GenView().contentPane);
-        frame.setPreferredSize(new Dimension(500, 200));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -189,11 +231,16 @@ public class GenView extends JPanel {
         manualRadioButton = new JRadioButton();
         manualRadioButton.setText("Manual");
         contentPane.add(manualRadioButton, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        contentPane.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         generateButton = new JButton();
         generateButton.setText("Generate");
         contentPane.add(generateButton, new com.intellij.uiDesigner.core.GridConstraints(4, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        manualNumber = new JTextField();
+        manualNumber.setEnabled(true);
+        contentPane.add(manualNumber, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        manualPart = new JTextField();
+        manualPart.setEnabled(true);
+        manualPart.setText("");
+        contentPane.add(manualPart, new com.intellij.uiDesigner.core.GridConstraints(0, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(autoRadioButton);
