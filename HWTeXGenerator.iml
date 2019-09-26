@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
-    <libelement value="file://C:/Users/nelso/git/PDFBox/fontbox-2.0.15.jar" />
-    <libelement value="file://C:/Users/nelso/git/PDFBox/pdfbox-2.0.15.jar" />
-    <libelement value="file://C:/Users/nelso/git/PDFBox/pdfbox-tools-2.0.15.jar" />
-    <libelement value="file://C:/Users/nelso/git/PDFBox/preflight-2.0.15.jar" />
-    <libelement value="file://C:/Users/nelso/git/PDFBox/xmpbox-2.0.15.jar" />
-    <libelement value="file://C:/Users/nelso/git/PDFBox/commons-logging-1.2/commons-logging-1.2.jar" />
+    <libelement value="file://$USER_HOME$/git/PDFBox/fontbox-2.0.15.jar" />
+    <libelement value="file://$USER_HOME$/git/PDFBox/pdfbox-2.0.15.jar" />
+    <libelement value="file://$USER_HOME$/git/PDFBox/pdfbox-tools-2.0.15.jar" />
+    <libelement value="file://$USER_HOME$/git/PDFBox/preflight-2.0.15.jar" />
+    <libelement value="file://$USER_HOME$/git/PDFBox/xmpbox-2.0.15.jar" />
+    <libelement value="file://$USER_HOME$/git/PDFBox/commons-logging-1.2/commons-logging-1.2.jar" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="1" />
     </src_description>
@@ -22,7 +22,7 @@
     <orderEntry type="module-library">
       <library name="fontbox-2.0.15.jar">
         <CLASSES>
-          <root url="file://C:/Users/nelso/git/PDFBox/fontbox-2.0.15.jar" />
+          <root url="file://$USER_HOME$/git/PDFBox/fontbox-2.0.15.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -31,7 +31,7 @@
     <orderEntry type="module-library">
       <library name="pdfbox-2.0.15.jar">
         <CLASSES>
-          <root url="file://C:/Users/nelso/git/PDFBox/pdfbox-2.0.15.jar" />
+          <root url="file://$USER_HOME$/git/PDFBox/pdfbox-2.0.15.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -40,7 +40,7 @@
     <orderEntry type="module-library">
       <library name="pdfbox-tools-2.0.15.jar">
         <CLASSES>
-          <root url="file://C:/Users/nelso/git/PDFBox/pdfbox-tools-2.0.15.jar" />
+          <root url="file://$USER_HOME$/git/PDFBox/pdfbox-tools-2.0.15.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -49,7 +49,7 @@
     <orderEntry type="module-library">
       <library name="preflight-2.0.15.jar">
         <CLASSES>
-          <root url="file://C:/Users/nelso/git/PDFBox/preflight-2.0.15.jar" />
+          <root url="file://$USER_HOME$/git/PDFBox/preflight-2.0.15.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -58,7 +58,7 @@
     <orderEntry type="module-library">
       <library name="xmpbox-2.0.15.jar">
         <CLASSES>
-          <root url="file://C:/Users/nelso/git/PDFBox/xmpbox-2.0.15.jar" />
+          <root url="file://$USER_HOME$/git/PDFBox/xmpbox-2.0.15.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -67,12 +67,12 @@
     <orderEntry type="module-library">
       <library name="commons-logging-1.2.jar">
         <CLASSES>
-          <root url="file://C:/Users/nelso/git/PDFBox/commons-logging-1.2/commons-logging-1.2.jar" />
+          <root url="file://$USER_HOME$/git/PDFBox/commons-logging-1.2/commons-logging-1.2.jar" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" name="xmpbox-2.0.15" level="project" />
   </component>
 </module>

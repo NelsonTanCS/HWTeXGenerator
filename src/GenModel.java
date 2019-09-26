@@ -3,14 +3,13 @@ import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GenModel {
 	private static final String HEADER =
 			"%%%%%%%%%%%%%%%%%%%%%%%%% NOTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
-            "%% You can ignore everything from here until             %%\r\n" +
-            "%% \"Question 1\"                                        %%\r\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" +
+            "% You can ignore everything from here until \"Question 1\"\r\n" +
             "\\documentclass[11pt]{article}\r\n" +
             "\\usepackage{amsmath, amsfonts, amsthm, amssymb}  % Some math symbols\r\n" +
             "\\usepackage{fullpage}\r\n" +

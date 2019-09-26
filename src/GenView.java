@@ -7,8 +7,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class GenView extends JPanel {
-    private JRadioButton autoRadioButton;
-    private JRadioButton manualRadioButton;
     private JTextField inputTextField;
     private JTextField saveToTextField;
     private JButton browseButton1;
@@ -19,8 +17,7 @@ public class GenView extends JPanel {
     private JLabel inputLabel;
     private JLabel saveToLabel;
     private JLabel savingLabel;
-    private JTextField manualNumber;
-    private JTextField manualPart;
+    private JLabel classLabel;
     private JFileChooser fc;
 
     private File inputFile;
@@ -32,8 +29,6 @@ public class GenView extends JPanel {
 
     public GenView() {
         $$$setupUI$$$();
-        manualNumber.setVisible(false);
-        manualPart.setVisible(false);
         inputFile = null;
         fileName = null;
 
@@ -58,6 +53,10 @@ public class GenView extends JPanel {
                 // if SaveTo field was chosen before Input field
                 if (!saveToTextField.getText().isEmpty() && !saveToTextField.getText().contains(".")) {
                     saveToTextField.setText(saveToTextField.getText() + "\\" + fileName + TEMPLATE_EXT);
+                } else { // SaveTo field is empty -> autofill
+                    String inputString = inputFile.toString();
+                    inputString = inputString.substring(0, inputString.indexOf("."));
+                    saveToTextField.setText(inputString + TEMPLATE_EXT);
                 }
             }
         });
@@ -82,57 +81,49 @@ public class GenView extends JPanel {
          *  Given a valid input file and save location, generates the tex template.
          */
         generateButton.addActionListener(e -> {
-            if (manualRadioButton.isSelected()) {
-                if (saveToTextField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(contentPane, "Choose a save location");
-                } else {
-                    int numOfQuestions = Integer.parseInt(manualNumber.getText());
-                    String numOfParts = manualPart.getText();
-                    ArrayList<Integer> questionArray = new ArrayList<Integer>(numOfQuestions);
-                    for (int i = 0; i < numOfQuestions - 1; i++) {
-                        questionArray.add(Integer.parseInt(numOfParts.substring(0, numOfParts.indexOf(","))));
-                        numOfParts = numOfParts.substring(numOfParts.indexOf(",") + 1);
-                    }
-                    questionArray.add(Integer.parseInt(numOfParts));
-                    GenModel.printTemplate(questionArray, saveToTextField.getText() + "\\manualTemplate.tex");
+            /*if (saveToTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+            }
+            else {
+                int numOfQuestions = Integer.parseInt(manualNumber.getText());
+                String numOfParts = manualPart.getText();
+                ArrayList<Integer> questionArray = new ArrayList<Integer>(numOfQuestions);
+                for (int i = 0; i < numOfQuestions - 1; i++) {
+                    questionArray.add(Integer.parseInt(numOfParts.substring(0, numOfParts.indexOf(","))));
+                    numOfParts = numOfParts.substring(numOfParts.indexOf(",") + 1);
                 }
-            } else { // autoRadioButton
-                if (inputFile == null) {
-                    JOptionPane.showMessageDialog(contentPane, "Choose an input file");
-                } else if (saveToTextField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+                questionArray.add(Integer.parseInt(numOfParts));
+                GenModel.printTemplate(questionArray, saveToTextField.getText() + "\\manualTemplate.tex");
+            } */
+            if (inputFile == null) {
+                JOptionPane.showMessageDialog(contentPane, "Choose an input file");
+            } else if (saveToTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(contentPane, "Choose a save location");
+            } else {
+                Numbering numb = numberings[typeComboBox.getSelectedIndex()];
+                /*if (classes[typeComboBox.getSelectedIndex()].equals("Custom")) {
+                    String question = manualNumber.getText();
+                    String part = manualPart.getText();
+
+                    // Well formed data check
+                    if (!question.contains("#") || !question.contains("*")) {
+                        throw new IllegalArgumentException("Custom question must contains a \"#\" or \"*\"");
+                    }
+                    if (!part.contains("#") || !part.contains("*")) {
+                        throw new IllegalArgumentException("Custom part must contains a \"#\" or \"*\"");
+                    }
+
+                    numb = new Numbering(manualNumber.getText(), manualPart.getText());
                 } else {
-                    Numbering numb = null;
-                    if (classes[typeComboBox.getSelectedIndex()].equals("Custom")) {
-                        String question = manualNumber.getText();
-                        String part = manualPart.getText();
-
-                        // Well formed data check
-                        if (!question.contains("#") || !question.contains("*")) {
-                            throw new IllegalArgumentException("Custom question must contains a \"#\" or \"*\"");
-                        }
-                        if (!part.contains("#") || !part.contains("*")) {
-                            throw new IllegalArgumentException("Custom part must contains a \"#\" or \"*\"");
-                        }
-
-                        numb = new Numbering(manualNumber.getText(), manualPart.getText());
-                    } else {
-                        numb = numberings[typeComboBox.getSelectedIndex()];
-                    }
-                    try {
-                        GenModel.makeTemplate(inputFile, saveToTextField.getText(), numb);
-                        JOptionPane.showMessageDialog(contentPane, "Done");
-                    } catch (IOException o) {
-                        o.printStackTrace();
-                    }
+                    numb = numberings[typeComboBox.getSelectedIndex()];
+                } */
+                try {
+                    GenModel.makeTemplate(inputFile, saveToTextField.getText(), numb);
+                    JOptionPane.showMessageDialog(contentPane, "Done");
+                } catch (IOException o) {
+                    o.printStackTrace();
                 }
             }
-        });
-
-        manualRadioButton.addActionListener(e -> {
-            System.out.println("sup");
-            manualNumber.setVisible(true);
-            manualPart.setVisible(true);
         });
     }
 
@@ -192,20 +183,16 @@ public class GenView extends JPanel {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 6, new Insets(0, 0, 0, 0), -1, -1));
-        autoRadioButton = new JRadioButton();
-        autoRadioButton.setSelected(true);
-        autoRadioButton.setText("Automatic");
-        contentPane.add(autoRadioButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(6, 8, new Insets(0, 0, 0, 0), -1, -1));
         saveToTextField = new JTextField();
         saveToTextField.setText("");
-        contentPane.add(saveToTextField, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        contentPane.add(saveToTextField, new com.intellij.uiDesigner.core.GridConstraints(3, 2, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         browseButton1 = new JButton();
         browseButton1.setText("Browse");
-        contentPane.add(browseButton1, new com.intellij.uiDesigner.core.GridConstraints(2, 5, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(browseButton1, new com.intellij.uiDesigner.core.GridConstraints(2, 6, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         browseButton2 = new JButton();
         browseButton2.setText("Browse");
-        contentPane.add(browseButton2, new com.intellij.uiDesigner.core.GridConstraints(3, 5, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(browseButton2, new com.intellij.uiDesigner.core.GridConstraints(3, 6, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         typeComboBox = new JComboBox();
         typeComboBox.setEnabled(true);
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
@@ -213,38 +200,35 @@ public class GenView extends JPanel {
         defaultComboBoxModel1.addElement("311/312");
         defaultComboBoxModel1.addElement("Custom");
         typeComboBox.setModel(defaultComboBoxModel1);
-        contentPane.add(typeComboBox, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(typeComboBox, new com.intellij.uiDesigner.core.GridConstraints(1, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         inputLabel = new JLabel();
         inputLabel.setText("Input");
-        contentPane.add(inputLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(inputLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         saveToLabel = new JLabel();
         saveToLabel.setText("Save To");
-        contentPane.add(saveToLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(saveToLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         inputTextField = new JTextField();
         inputTextField.setColumns(0);
         inputTextField.setEditable(true);
         inputTextField.setText("");
-        contentPane.add(inputTextField, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        contentPane.add(inputTextField, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
         savingLabel = new JLabel();
         savingLabel.setText("");
-        contentPane.add(savingLabel, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
-        manualRadioButton = new JRadioButton();
-        manualRadioButton.setText("Manual");
-        contentPane.add(manualRadioButton, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPane.add(savingLabel, new com.intellij.uiDesigner.core.GridConstraints(4, 2, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
         generateButton = new JButton();
         generateButton.setText("Generate");
-        contentPane.add(generateButton, new com.intellij.uiDesigner.core.GridConstraints(4, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        manualNumber = new JTextField();
-        manualNumber.setEnabled(true);
-        contentPane.add(manualNumber, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        manualPart = new JTextField();
-        manualPart.setEnabled(true);
-        manualPart.setText("");
-        contentPane.add(manualPart, new com.intellij.uiDesigner.core.GridConstraints(0, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        ButtonGroup buttonGroup;
-        buttonGroup = new ButtonGroup();
-        buttonGroup.add(autoRadioButton);
-        buttonGroup.add(manualRadioButton);
+        contentPane.add(generateButton, new com.intellij.uiDesigner.core.GridConstraints(4, 5, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        classLabel = new JLabel();
+        classLabel.setText("Class");
+        contentPane.add(classLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
+        contentPane.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, new Dimension(30, -1), null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
+        contentPane.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(1, 7, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, new Dimension(30, -1), null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer3 = new com.intellij.uiDesigner.core.Spacer();
+        contentPane.add(spacer3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 10), null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer4 = new com.intellij.uiDesigner.core.Spacer();
+        contentPane.add(spacer4, new com.intellij.uiDesigner.core.GridConstraints(5, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(-1, 10), null, 0, false));
     }
 
     /**
