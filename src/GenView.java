@@ -42,6 +42,20 @@ public class GenView extends JPanel {
         fc = new JFileChooser();
         fc.addChoosableFileFilter(new PDFFilter());
 
+        new FileDrop(contentPane, files -> {
+            for (int i = 0; i < files.length; i++) {
+                try {
+                    String temp = files[i].getName();
+                    String name = temp.substring(0, temp.indexOf("."));
+                    inputFile = files[i];
+                    inputTextField.setText(files[i].getCanonicalPath());
+                    saveToTextField.setText(files[i].getParent() + "\\" + name + TEMPLATE_EXT);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(contentPane, "Couldn't add file");
+                }
+            }
+        });
+
         /**
          *  Sets respective textField to reflect the chosen file
          *  Also sets the saveTo field if that was chosen before the input file
@@ -275,7 +289,7 @@ public class GenView extends JPanel {
         partsTextField.setToolTipText("Comma-separated list of number of parts per question (no spaces)");
         contentPane.add(partsTextField, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, new Dimension(100, -1), 0, false));
         generateButton = new JButton();
-        generateButton.setText("Generate");
+        generateButton.setText("Save and Open");
         contentPane.add(generateButton, new com.intellij.uiDesigner.core.GridConstraints(6, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(87, 30), null, 0, false));
         customQuestion = new JTextField();
         contentPane.add(customQuestion, new com.intellij.uiDesigner.core.GridConstraints(1, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, new Dimension(50, -1), 0, false));

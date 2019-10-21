@@ -147,7 +147,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Generate"/>
+          <text value="Save and Open"/>
         </properties>
       </component>
       <component id="97961" class="javax.swing.JTextField" binding="customQuestion">
