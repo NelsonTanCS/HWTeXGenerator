@@ -6,7 +6,7 @@ Generates a TeX template by parsing CSE 311/312/446 homework assignments.
 4. Browse the homework pdf e.g. hw0.pdf or drag and drop the file into the window.
 5. Generate.
 
-TODO: Make it less ugly, auto-detect, add custom classes permanently, instructions in pop-out.
+TODO: Make it less ugly, auto-detect class, add custom classes permanently, instructions in pop-out, save and open in overleaf, URL, paste anywhere in window, open option (no save).
 
 ![GUI image](https://github.com/NelsonTanCS/HWTeXGenerator/blob/master/texgen.PNG)
 
