@@ -31,7 +31,7 @@ public class GenView extends JPanel {
     private static final Numbering[] numberings =
             {new Numbering("#.", "*."),
                     new Numbering("#.", "(*)"),
-                    new Numbering("Problem #", "!@#*#@!")};
+                    new Numbering("Problem #", "*)")};
 
     public GenView() {
         $$$setupUI$$$();
